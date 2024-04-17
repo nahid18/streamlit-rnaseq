@@ -1,13 +1,5 @@
 import streamlit as st
 from utils import icon, data, category
-# import streamlit.components.v1 as components
-# from pandas.api.types import (
-#     is_categorical_dtype,
-#     is_datetime64_any_dtype,
-#     is_numeric_dtype,
-#     is_object_dtype,
-# )
-
 
 # UI configurations
 st.set_page_config(page_title="RNASeq Tools", page_icon=":dna:", layout="wide")
@@ -25,9 +17,6 @@ categories = category.get_category_map()
 def configure_sidebar() -> None:
     """
     Setup and display the sidebar elements.
-
-    This function configures the sidebar of the Streamlit application,
-    including the form for user inputs and the resources section.
     """
     with st.sidebar:
         with st.form(key="rna_form"):
@@ -100,9 +89,6 @@ def main_page(submitted: bool = False, filter_tools: list = []):
 def main():
     """
     Main function to run the Streamlit application.
-
-    This function initializes the sidebar configuration and the main page layout.
-    It retrieves the user inputs from the sidebar, and passes them to the main page function.
     """
     (
         submitted,

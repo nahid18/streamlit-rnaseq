@@ -6,14 +6,35 @@ st.set_page_config(page_title="RNASeq Tools", page_icon=":dna:", layout="wide")
 icon.show_icon(":computer:")
 st.markdown("# RNASeq Tools")
 
-
 # Input CSV
 INPUT_CSV = "rna_seq.csv"
 df = data.get_data(INPUT_CSV)
 categories = category.get_category_map()
 
 
-# Configure Layout
+graph_images = [
+    "https://raw.githubusercontent.com/Mangul-Lab-USC/RNA-seq/master/figures/5e.png",
+    "https://raw.githubusercontent.com/Mangul-Lab-USC/RNA-seq/master/figures/citations_per_year.png",
+    "https://raw.githubusercontent.com/Mangul-Lab-USC/RNA-seq/master/figures/figure4a.png",
+    "https://raw.githubusercontent.com/Mangul-Lab-USC/RNA-seq/master/figures/figure4b.png",
+    "https://raw.githubusercontent.com/Mangul-Lab-USC/RNA-seq/master/figures/figure4c.png",
+    "https://raw.githubusercontent.com/Mangul-Lab-USC/RNA-seq/master/figures/figure5a.png",
+    "https://raw.githubusercontent.com/Mangul-Lab-USC/RNA-seq/master/figures/figure5b.png",
+    "https://raw.githubusercontent.com/Mangul-Lab-USC/RNA-seq/master/figures/figure5c.png",
+    "https://raw.githubusercontent.com/Mangul-Lab-USC/RNA-seq/master/figures/figure5d.png",
+    "https://raw.githubusercontent.com/Mangul-Lab-USC/RNA-seq/master/figures/most&all.png",
+    "https://raw.githubusercontent.com/Mangul-Lab-USC/RNA-seq/master/figures/most&all_scatter.png",
+    "https://raw.githubusercontent.com/Mangul-Lab-USC/RNA-seq/master/figures/sum_citations.png",
+]
+
+def display_graphs(image_urls):
+    cols = st.columns(2)
+
+    for i, url in enumerate(image_urls):
+        col_index = i % 2
+        cols[col_index].markdown("<img src='{}' width='400' style='display: block; margin: 0 auto;'>".format(url), unsafe_allow_html=True)
+
+
 def configure_sidebar() -> None:
     """
     Setup and display the sidebar elements.
@@ -32,6 +53,14 @@ def configure_sidebar() -> None:
                 use_container_width=True,
             )
 
+        # Add a button for graphs
+        if st.button("View All Graphs"):
+            st.session_state['show_graphs'] = True
+
+        # Add a "Home" button
+        if st.button("Home"):
+            st.session_state['show_graphs'] = False
+
         st.markdown(
             """
             ---
@@ -48,7 +77,6 @@ def configure_sidebar() -> None:
             submitted,
             filter_tools,
         )
-
 
 def main_page(submitted: bool = False, filter_tools: list = []):
     COLUMNS = 3
@@ -85,7 +113,6 @@ def main_page(submitted: bool = False, filter_tools: list = []):
                     st.markdown(f"Category: **{category}**")
                     st.write(software)
 
-
 def main():
     """
     Main function to run the Streamlit application.
@@ -95,8 +122,14 @@ def main():
         filter_tools,
     ) = configure_sidebar()
 
-    main_page(submitted=submitted, filter_tools=filter_tools)
 
+    if 'show_graphs' not in st.session_state:
+        st.session_state['show_graphs'] = False
+
+    if st.session_state['show_graphs']:
+        display_graphs(graph_images)
+    else:
+        main_page(submitted=submitted, filter_tools=filter_tools)
 
 if __name__ == "__main__":
     main()
